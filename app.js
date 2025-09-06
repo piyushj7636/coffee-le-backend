@@ -11,13 +11,13 @@ import admin from 'firebase-admin';
 import { verifyFirebaseToken } from "./controllers/userController.js";
 import User from "./models/user.js"
 
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
 
 const app = express()
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -29,8 +29,8 @@ app.use(cookieParser());
 connectDB()
 
 const require = createRequire(import.meta.url);
-// const serviceAccount = require('./config/serviceAccountKey.json');
-const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+const serviceAccount = require('./config/serviceAccountKey.json');
+// const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
