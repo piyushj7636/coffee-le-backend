@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
 		const formattedPhone = phone.startsWith("+") ? phone : `+91${phone}`
 		let user;
 	try {
-		const existingUser = await User.findOne({phone: formattedPhone})
+		const existingUser = await User.findOne({phone})
 		if(existingUser && existingUser.phoneVerified){
 			return res.status(400).json({
 				error: "User already exists, try login"
